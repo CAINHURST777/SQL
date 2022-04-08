@@ -1,0 +1,27 @@
+CREATE TABLE ebay_videogame_shop (id INTEGER PRIMARY KEY, video_game_name TEXT, inventory INTEGER, price REAL, number_sold INTEGER);
+
+INSERT INTO ebay_videogame_shop VALUES ("1","Golden Sun","4","10.99","2");
+INSERT INTO ebay_videogame_shop VALUES ("2", "Pokemon Soul Silver","4", "75.99","3");
+
+INSERT INTO ebay_videogame_shop VALUES ("3", "Spyro the Dragon Trilogy","8","15.99","5");
+
+INSERT INTO ebay_videogame_shop VALUES ("4", "Pokemon X", "3","32.99","3");
+INSERT INTO ebay_videogame_shop VALUES ("5", "Super Mario 64", "1", "65.99", "0");
+
+INSERT INTO ebay_videogame_shop VALUES ("6","Monster Hunter World (PC)","8", "15.99","6");
+
+INSERT INTO ebay_videogame_shop VALUES ("7", "Mario Sushine","3", "10.99", "1");
+
+INSERT INTO ebay_videogame_shop VALUES ("8","Deadly Creatures","1","5.00", "0");
+
+INSERT INTO ebay_videogame_shop VALUES ("9","Dark Souls","10","19.99","7");
+
+INSERT INTO ebay_videogame_shop VALUES ("10","Kingdom Hearts 2", "3", "5.99","1");
+
+INSERT INTO ebay_videogame_shop VALUES ("11", "Power Rangers","1", "40.00","0");
+
+INSERT INTO ebay_videogame_shop VALUES ("12","Fire Emblem","1","149.99","0");
+
+INSERT INTO ebay_videogame_shop VALUES ("13", "Ecco the Dolphin","1", "49.99","1");
+INSERT INTO ebay_videogame_shop VALUES ("14", "Crash Bandicoot","3","49.99","2");
+INSERT INTO ebay_videogame_shop VALUES ( "15","Chrono Trigger (UNOPENED)","1","250.00","1");
