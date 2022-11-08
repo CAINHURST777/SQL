@@ -1,4 +1,14 @@
-CREATE TABLE ebay_videogame_shop (id INTEGER PRIMARY KEY, video_game_name TEXT, inventory INTEGER, price REAL, number_sold INTEGER);
+/* For this project, I created a fictional gamestore table containing all the games I'm selling on ebay with their prices, amounts sold. etc.
+I started this project back in April 2022 and if you'll look further down, I later improved upon it by adding more information about the games, and changing
+the table name as it was way too long of a title. */
+
+
+CREATE TABLE ebay_videogame_shop 
+(id INTEGER PRIMARY KEY, 
+game TEXT, 
+inventory INTEGER, 
+price REAL, 
+number_sold INTEGER);
 
 INSERT INTO ebay_videogame_shop VALUES ("1","Golden Sun","4","10.99","2");
 INSERT INTO ebay_videogame_shop VALUES ("2", "Pokemon Soul Silver","4", "75.99","3");
@@ -25,3 +35,65 @@ INSERT INTO ebay_videogame_shop VALUES ("12","Fire Emblem","1","149.99","0");
 INSERT INTO ebay_videogame_shop VALUES ("13", "Ecco the Dolphin","1", "49.99","1");
 INSERT INTO ebay_videogame_shop VALUES ("14", "Crash Bandicoot","3","49.99","2");
 INSERT INTO ebay_videogame_shop VALUES ( "15","Chrono Trigger (UNOPENED)","1","250.00","1");
+
+SELECT * FROM ebay_videogame_shop;
+
+SELECT  MAX(price) FROM  ebay_videogame_shop;
+
+SELECT game FROM  ebay_videogame_shop;
+
+SELECT AVG(price) AS Avg_Price 
+FROM ebay_videogame_shop;
+
+SELECT game, price 
+    FROM ebay_videogame_shop
+ORDER BY  price;
+
+SELECT SUM(number_sold) AS total_sold
+FROM ebay_videogame_shop;
+
+
+SELECT game, price 
+FROM ebay_videogame_shop
+WHERE price >=50
+GROUP BY price;
+
+SELECT game AS best_seller, MAX(number_sold) AS total_sales
+from ebay_videogame_shop;
+
+
+SELECT game, (inventory - number_sold) 
+AS quant_left 
+FROM ebay_videogame_shop shop   
+order by quant_left; 
+
+/* originally created this project April of 2022. I was just 
+starting out back then, but I think this is a decent showcase of what I knew back then. The following code will improve upon what I had done back then. */
+
+ALTER TABLE ebay_videogame_shop
+RENAME TO game_shop;
+
+select * from game_shop
+LIMIT 5;
+
+ALTER table game_shop ADD Platform TEXT;
+
+select * from game_shop
+LIMIT 5;
+
+UPDATE game_shop SET Platform ='Playstation'
+WHERE Id = 1;
+UPDATE game_shop SET Platform ='Nindendo DS'
+WHERE Id = 2;
+UPDATE game_shop SET Platform = 'Playstation 4'
+WHERE Id = 3;
+UPDATE game_shop SET Platform = 'Nintendo 3ds'
+WHERE Id = 4;
+UPDATE game_shop SET Platform = 'Nintendo 64'
+WHERE Id = 5;
+
+
+select * from game_shop
+LIMIT 5;
+
+ 
