@@ -1,4 +1,8 @@
-/* Put your data in here and query it! */
+   /* This is another early project of mine. I did not build this table, but pulled the data from Khan Academy. It was a fun little project to practice
+   sql queries at the time. I looked at some aggreagate data regarding the stats here. I concatenated types since they appear as separate columns in this table 
+   and I wanted to see them together.*/
+
+
 
 
 CREATE TABLE pokemon(
@@ -16,6 +20,9 @@ CREATE TABLE pokemon(
   Generation INTEGER,
   Legendary  TEXT
 );
+
+
+
 INSERT INTO pokemon(Number,Name,Type_1,Type_2,Total,HP,Attack,Defense,Sp_Atk,Sp_Def,Speed,Generation,Legendary) VALUES (1,'Bulbasaur','Grass','Poison',318,45,49,49,65,65,45,1,'False');
 INSERT INTO pokemon(Number,Name,Type_1,Type_2,Total,HP,Attack,Defense,Sp_Atk,Sp_Def,Speed,Generation,Legendary) VALUES (2,'Ivysaur','Grass','Poison',405,60,62,63,80,80,60,1,'False');
 INSERT INTO pokemon(Number,Name,Type_1,Type_2,Total,HP,Attack,Defense,Sp_Atk,Sp_Def,Speed,Generation,Legendary) VALUES (3,'Venusaur','Grass','Poison',525,80,82,83,100,100,80,1,'False');
@@ -819,117 +826,127 @@ INSERT INTO pokemon(Number,Name,Type_1,Type_2,Total,HP,Attack,Defense,Sp_Atk,Sp_
 
 /*which pokemon has the highest attack among pokemon with more than one type */
 
-SELECT Name, MAX(Attack)
+SELECT 
+Name, 
+Attack AS highest_atk
 FROM pokemon
 WHERE Type_2 <> "NULL"
-GROUP BY Type_1
-ORDER BY Attack;
+ORDER BY 
+Attack DESC
+LIMIT 1;
 
 /*what are the average attack stats for each type?*/
 
 
-SELECT Type_1,ROUND(AVG(Attack)) as "Average_Attack"
+SELECT 
+Type_1,
+AVG(Attack)
 FROM pokemon
-GROUP BY type_1
-ORDER BY Attack ;
+GROUP BY 
+Type_1
+ORDER BY 
+Attack DESC;
 
 /*Which pokemon type has the highest average Sp_Atk?*/
 
-SELECT Type_1,ROUND(AVG(Sp_Atk)) as "Average_Sp_Atk"
+SELECT 
+Type_1, 
+AVG(Sp_Atk)
 FROM pokemon
 GROUP BY type_1
-ORDER BY ROUND(AVG(Sp_Atk)) DESC
+ORDER BY 
+Sp_atk DESC
 LIMIT 1;
 
 --What is the difference between the highest Sp_Atk and the highest Attack?
 
 
-SELECT MAX(Sp_Atk),MAX(Attack)
+SELECT MAX(Sp_Atk)- MAX(Attack)
 FROM pokemon
 LIMIT 1;
 
 -- Which Type has the highest number of pokemon in it? Which has the least? 
 
-SELECT COUNT(Name) AS "TOTAL WATER TYPE PKMN" 
+SELECT COUNT(*) AS water_count 
 FROM pokemon
 WHERE Type_1 = 'Water' or Type_2 = 'Water';
 
-SELECT COUNT(Name) AS "TOTAL FIRE TYPE PKMN" 
+SELECT COUNT(*) AS fire_count
 FROM pokemon
 WHERE Type_1 = 'Fire' or Type_2 = 'Fire';
 
-SELECT COUNT(Name) AS "TOTAL PSYCHIC TYPE PKMN" 
+SELECT COUNT(*) AS psychic_count 
 FROM pokemon
 WHERE Type_1 = 'Psychic' or Type_2 = 'Psychic';
 
-SELECT COUNT(Name) AS "TOTAL DRAGON TYPE PKMN" 
+SELECT COUNT(*) AS dragon_count 
 FROM pokemon
 WHERE Type_1 = 'Dragon' or Type_2 = 'Dragon';
 
-SELECT COUNT(Name) AS "TOTAL GHOST TYPE PKMN" 
+SELECT COUNT(*) AS ghost_count 
 FROM pokemon
 WHERE Type_1 = 'Ghost' or Type_2 = 'Ghost';
 
-SELECT COUNT(Name) AS "TOTAL NORMAl TYPE PKMN" 
+SELECT COUNT(*) AS normal_count 
 FROM pokemon
 WHERE Type_1 = 'Normal' or Type_2 = 'Normal';
 
-SELECT COUNT(Name) AS "TOTAL GRASS TYPE PKMN" 
+SELECT COUNT(*) AS grass_count 
 FROM pokemon
 WHERE Type_1 = 'Grass' or Type_2 = 'Grass';
 
-SELECT COUNT(Name) AS "TOTAL DARK TYPE PKMN" 
+SELECT COUNT(*) AS dark_count 
 FROM pokemon
 WHERE Type_1 = 'Dark' or Type_2 = 'Dark';
 
-SELECT COUNT(Name) AS "TOTAL BUG TYPE PKMN" 
+SELECT COUNT(*) AS bug_count 
 FROM pokemon
 WHERE Type_1 = 'Bug' or Type_2 = 'Bug';
 
-SELECT COUNT(Name) AS "TOTAL POISON TYPE PKMN" 
+SELECT COUNT(*) AS poison_count 
 FROM pokemon
 WHERE Type_1 = 'Poison' or Type_2 = 'Poison';
 
-SELECT COUNT(Name) AS "TOTAL ICE TYPE PKMN" 
+SELECT COUNT(*) AS ice_count 
 FROM pokemon
 WHERE Type_1 = 'Ice' or Type_2 = 'Ice';
 
-SELECT COUNT(Name) AS "TOTAL FIGHTING TYPE PKMN" 
+SELECT COUNT(*) AS fighting_count 
 FROM pokemon
 WHERE Type_1 = 'Fighting' or Type_2 = 'Fighting';
 
-SELECT COUNT(Name) AS "TOTAL STEEL TYPE PKMN" 
+SELECT COUNT(*) AS steel_count 
 FROM pokemon
 WHERE Type_1 = 'Steel' or Type_2 = 'Steel';
 
-SELECT COUNT(Name) AS "TOTAL FLYING TYPE PKMN" 
+SELECT COUNT(*) AS flying_count 
 FROM pokemon
 WHERE Type_1 = 'Flying' or Type_2 = 'Flying';
 
-SELECT COUNT(Name) AS "TOTAL GROUND TYPE PKMN" 
+SELECT COUNT(*) AS ground_count 
 FROM pokemon
 WHERE Type_1 = 'Ground' or Type_2 = 'Ground';
 
-SELECT COUNT(Name) AS "TOTAL ROCK TYPE PKMN" 
+SELECT COUNT(*) AS rock_count 
 FROM pokemon
 WHERE Type_1 = 'Rock' or Type_2 = 'Rock';
 
-SELECT COUNT(Name) AS "TOTAL FAIRY TYPE PKMN" 
+SELECT COUNT(*) AS fairy_count 
 FROM pokemon
 WHERE Type_1 = 'Fairy' or Type_2 = 'Fairy';
 
-SELECT COUNT(Name) AS "TOTAL ELECTRIC TYPE PKMN" 
+SELECT COUNT(*) AS electric_count 
 FROM pokemon
 WHERE Type_1 = 'Electric' or Type_2 = 'Electric';
 
 
 -- WATER TYPE HAS THE MOST POKEMON IN IT WITH 126!
-
------------------------------------------------------
+-- ICE HAS THE LEAST WITH 38
+-----------------------------------------
 
 --Which pokemon is fastest, and how much faster (or not) are they than the average of the fastest GROUP?
 
-SELECT MAX(Speed),MIN(Speed),ROUND(AVG(Speed))
+SELECT MAX(Speed),MIN(Speed),AVG(Speed)
 FROM pokemon
 ORDER BY Speed DESC;
 
@@ -972,4 +989,13 @@ FROM pokemon
 WHERE Type_1 ='"Psychic' OR Type_2 = 'Psychic'
 ORDER BY Speed DESC
 LIMIT 1;
+
+
+
+/* select each unique expanded pokemon type*/
+
+Select DISTINCT(Type_1 || '-' || Type_2) AS pokemon_type
+FROM pokemon
+Group by pokemon_type; 
+
 
