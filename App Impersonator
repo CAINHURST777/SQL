@@ -1,0 +1,42 @@
+/* Another small project originally done on Khan Academy. I was just using this to practice updating tables. I was promted to visualize 
+what SQL might look like for a social media app. Please see a few examples below. */
+
+
+
+/* What does the app's SQL look like? */
+
+-- Social Media APP
+
+-- -----------------------------------------------------------
+
+
+
+CREATE TABLE users (Id INTEGER PRIMARY KEY, first_name TEXT, last_name TEXT,Age INTEGER);
+
+INSERT INTO users VALUES (1, 'Invader','Zim',160);
+INSERT INTO users VALUES (2, 'Jimmy','Neutron',10);
+INSERT INTO users VALUES (3, 'Bugs','Bunny',80);
+INSERT INTO users VALUES (4, 'Cainhurst','Reeves',33);
+INSERT INTO users VALUES (5, 'Kurama','Tengu',33);
+INSERT INTO users VALUES (6, 'Lady','Maria',25);
+INSERT INTO users VALUES (7, 'Master','Willem',160);
+
+ALTER TABLE users ADD COLUMN  gender TEXT;
+
+UPDATE users SET gender = 'Male' 
+WHERE id IN(1,2,3,4,5,7);
+
+UPDATE users SET gender = 'Female' 
+WHERE Id = 6;
+
+SELECT * FROM users;
+
+INSERT INTO users VALUES (8, 'Jean','Grey',31, 'Female');
+INSERT INTO users VALUES (9, 'Selina','Kyle',23, 'Female');
+
+SELECT * FROM users;
+
+DELETE from users WHERE first_name = 'Bugs' and last_name = 'Bunny';
+
+SELECT * FROM users; 
+
