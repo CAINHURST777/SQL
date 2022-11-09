@@ -1,0 +1,65 @@
+Here is a some code I used in project analysing sales data. 
+
+
+SELECT orderID,
+       Product,
+       Quantity,
+       price,
+       orderdate,
+       location
+  FROM JanSales;
+  
+-- HOW MANY SALES IN JANUARY
+
+SELECT COUNT(orderID) 
+  FROM BIT_DB.JanSales;
+-- HOW MANY OF THE JANUARY ORDERS WERE FOR IPHONE?
+
+SELECT COUNT(orderID) 
+  FROM BIT_DB.JanSales
+ WHERE Product = 'iPhone';
+ 
+-- Select the customer account numbers for all the orders that were placed in February.
+
+SELECT cust.acctnum
+  FROM BIT_DB.customers AS cust
+       JOIN
+       BIT_DB.FebSales AS feb ON cust.order_id = feb.orderID;
+       
+-- Which product was the cheapest one sold in January, and what was the price?
+
+SELECT 
+DISTINCT Product, 
+MIN(price)
+FROM BIT_DB.JanSales
+ORDER BY price
+limit 1;
+
+-- What is the total revenue for each product sold in January? 
+
+SELECT Product, SUM (Quantity) * price AS revenue
+FROM BIT_DB.JanSales
+GROUP BY Product;  
+
+-- Which products were sold in February at 548 Lincoln St, Seattle, WA 98101, how many of each were sold, and what was the total revenue?
+
+Select 
+Product, 
+SUM(Quantity),
+sum(quantity) * price AS revenue
+FROM BIT_DB.FebSales
+WHERE location = '548 Lincoln St, Seattle, WA 98101'
+GROUP BY Product ;
+
+
+-- How many customers ordered more than 2 products at a time in February, and what was the average amount spent for those customers?
+
+SELECT COUNT(cust.acctnum),AVG(quantity * price) AS avg_spend
+ FROM BIT_DB.FebSales as feb
+ LEFT JOIN BIT_DB.customers as cust
+ ON cust.order_id = feb.orderID
+ WHERE feb.Quantity > 2;
+ 
+  
+
+
