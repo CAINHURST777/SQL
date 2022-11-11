@@ -13,6 +13,7 @@ SELECT orderID,
 
 SELECT COUNT(orderID) 
   FROM BIT_DB.JanSales;
+
 -- HOW MANY OF THE JANUARY ORDERS WERE FOR IPHONE?
 
 SELECT COUNT(orderID) 
@@ -49,7 +50,58 @@ SUM(Quantity),
 sum(quantity) * price AS revenue
 FROM BIT_DB.FebSales
 WHERE location = '548 Lincoln St, Seattle, WA 98101'
-GROUP BY Product ;
+GROUP BY Product ; 
+
+-- List all the products sold in Los Angeles in February, and include how many of each were sold.
+
+SELECT 
+Product, 
+SUM(Quantity)
+FROM BIT_DB.FebSales
+WHERE location LIKE '%Los Angeles%'
+GROUP BY Product;
+
+--Which locations in New York received at least 3 orders in January, and how many orders did they each receive?
+
+SELECT
+location, COUNT(orderID)
+FROM BIT_DB.JanSales
+WHERE location LIKE '%NY%'
+GROUP BY location 
+HAVING COUNT(orderID) >= 3; 
+
+-- How many of each type of headphone were sold in February?
+SELECT 
+DISTINCT Product, sum(quantity)
+FROM BIT_DB.FebSales
+WHERE product LIKE '%headphone%'
+GROUP BY product;
+
+-- What was the average amount spent per account in February?
+
+SELECT SUM(feb.quantity * feb.price)/COUNT(cust.acctnum) AS avg_acct_spend
+FROM BIT_DB.customers AS cust 
+JOIN BIT_DB.FebSales AS feb
+ON feb.orderID = cust.order_id;
+
+SELECT sum(quantity*price)/count(cust.acctnum) AS avg_acct_spend
+FROM BIT_DB.FebSales Feb
+LEFT JOIN BIT_DB.customers cust
+ON FEB.orderid=cust.order_id;
+
+--What was the average quantity of products purchased per account in February?
+
+SELECT SUM(Quantity)/count(cust.acctnum) AS avg_quant
+FROM BIT_DB.FebSales Feb
+LEFT JOIN BIT_DB.customers cust
+ON FEB.orderid=cust.order_id;
+
+--Which product brought in the most revenue in January and how much revenue did it bring in total?
+
+SELECT product, Sum(quantity * price) AS revenue
+FROM BIT_DB.JanSales
+GROUP BY Product
+ORDER BY revenue DESC;
 
 
 -- How many customers ordered more than 2 products at a time in February, and what was the average amount spent for those customers?
