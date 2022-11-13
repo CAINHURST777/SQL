@@ -1,0 +1,96 @@
+-- This a small project exploring data from a track list with data that might appear in a spotify database. There was only one table to work with in this one.
+please see my exploration of this data below: 
+
+
+
+SELECT id,
+       artist_name,
+       track_name,
+       track_id,
+       popularity,
+       danceability,
+       energy,
+       "key",
+       loudness,
+       mode,
+       speechiness,
+       acousticness,
+       instrumentalness,
+       liveness,
+       valence,
+       tempo,
+       duration_ms,
+       time_signature
+  FROM Spotifydata;
+
+
+ SELECT * FROM BIT_DB.Spotifydata
+  LIMIT 5;
+  
+  -- top 10 most popular songs 
+SELECT
+track_name,
+popularity
+FROM BIT_DB.Spotifydata
+ORDER BY popularity DESC
+LIMIT 10;
+
+-- What is the average duration in minutes ?
+
+SELECT AVG(duration_ms)/60000 AS avg_duration_minutes 
+FROM BIT_DB.Spotifydata;
+
+-- which artists have the most popular songs and what are the songs?  
+
+SELECT 
+artist_name,
+track_name,
+MAX(popularity)
+FROM BIT_DB.Spotifydata
+WHERE popularity >= 90
+GROUP BY track_name
+ORDER BY MAX(popularity) DESC;  
+
+-- which artist has the most songs in this dataset? 
+
+SELECT
+artist_name,
+COUNT(track_name)
+FROM BIT_DB.Spotifydata
+GROUP BY artist_name
+ORDER BY COUNT(track_name) DESC;
+
+-- How many songs in the dataset feature other artists ? 
+
+SELECT COUNT(*)
+FROM BIT_DB.Spotifydata
+WHERE track_name LIKE '%(Feat%' or track_name LIKE '%(with%';
+
+-- which artists feature other artists and what are the songs ? 
+
+SELECT
+artist_name,
+track_name
+FROM BIT_DB.Spotifydata
+WHERE track_name LIKE '%(Feat%' or track_name LIKE '%(with%';
+
+-- make a playlist with songs that have little lyrics but high danceablity.
+
+SELECT * FROM 
+BIT_DB.Spotifydata
+ORDER BY speechiness, danceability DESC
+LIMIT 10;
+
+-- show the artist name and track name in one string ,as it might appear in a music app
+
+SELECT artist_name || '-' || track_name AS Artist_Track
+FROM BIT_DB.Spotifydata;
+
+-- Which songs have the hightest tempo?
+
+Select 
+track_name, 
+tempo
+FROM BIT_DB.Spotifydata
+ORDER BY tempo DESC
+LIMIT 5;
