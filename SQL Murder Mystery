@@ -1,0 +1,145 @@
+/*The following is a fun little project I did to practice SQL in which you must use SQL queries to find clues in the tables of the database
+to find the culprit of the murder. Here is the website where this can be found :https://mystery.knightlab.com/
+A database schema of all the table can be found under the "The rest is up to you!" section towards the middle of the page. I included my thought
+process as I worked through this project */
+
+
+--SQL MURDER MYSTERY 
+
+-- You vaguely remember that the crime was a murder that occurred sometime on Jan.15, 2018 and that it took place in SQL City. 
+-- using the first clue, I query the crime_scene_report table for more clues : 
+
+SELECT
+description, 
+date
+FROM crime_scene_report
+WHERE city = 'SQL City'
+AND date = 20180115;
+
+--This yields the following :  Security footage shows that there were 2 witnesses. The first witness lives at the last house on "Northwestern Dr". 
+The second witness, named Annabel, lives somewhere on "Franklin Ave".	20180115
+
+-- Given these clues, I use the following query to narrows down the names of the witnesses: 
+
+SELECT name, 
+address_number,
+address_street_name
+FROM person 
+WHERE address_street_name = 'Franklin Ave'
+AND name LIKE '%Annabel%'
+OR address_street_name LIKE '%Northwestern Dr%'
+ORDER BY address_number DESC; 
+
+-- This query shows me a list on names. Only person named Annabel on Franklin Ave, Annabel Miller, id 16371
+. Ordering by Street name, we get our second person,
+the last address ( last house) on Nortwestern Drive, Morty Schapiro, id 14887. 
+
+-- I then look for the names I found in the interview transcripts to search for any clues:
+
+SELECT p.name, 
+p.id, 
+i.transcript 
+FROM person AS p
+LEFT JOIN interview AS i
+ON p.id = i.person_id
+WHERE p.name = 'Annabel Miller'
+OR p.name = 'Morty Schapiro'
+
+-- I find the following :
+
+/* name	id	transcript
+Morty Schapiro	14887	I heard a gunshot and then saw a man run out. He had a "Get Fit Now Gym" bag. The membership number on the bag started with "48Z". 
+Only gold members have those bags. The man got into a car with a plate that included "H42W".
+Annabel Miller	16371	I saw the murder happen, and I recognized the killer from my gym when I was working out last week on January the 9th. */
+
+-- next, we look at the database for the gym, Get Fit Now to see if we have any matches for this description. 
+-- using the following query, we come accross two names that fit the description:
+
+SELECT mem.person_id,
+ci.check_in_date, 
+mem.name,
+mem.membership_status
+FROM get_fit_now_check_in AS ci
+JOIN get_fit_now_member AS mem
+ON ci.membership_id = mem.id
+WHERE ci.check_in_date = 20180109
+AND mem.id LIKE '%48Z%';
+
+
+/*person_id	check_in_date	name	membership_status
+28819	20180109	Joe Germuska	gold
+67318	20180109	Jeremy Bowers	gold */
+
+-- from here, we must reference the person and driver_license tables, with the driver license table containing license plate info to see which of these 
+two names has license plate number that includes "H42W".
+
+-- I used the following query to narrow it down to one final suspect: Jeremy Bowers	
+
+SELECT
+p.name,
+dl.plate_number
+FROM person AS p
+ JOIN drivers_license AS dl
+ ON p.license_id = dl.id
+WHERE p.name = 'Jeremy Bowers'
+OR p.name = 'Joe Germuska'
+AND plate_number LIKE '%H42W%';
+
+--inserting that name into the solution table yeilds the following : 
+
+/* Congrats, you found the murderer! But wait, there's more... If you think you're up for a challenge, try querying the interview transcript of the murderer to
+ find the real villain behind this crime. If you feel especially confident in your SQL skills, try to complete this final step with no more than 2 queries. 
+Use this same INSERT statement with your new suspect to check your answer.*/
+
+-- I next look for the killer's transcript to look for clues about the mastermind of this crime using the following query: 
+
+SELECT
+p.name,
+i.transcript
+FROM person AS p
+JOIN interview AS i
+ON p.id = i.person_id
+WHERE p.name = 'Jeremy Bowers';
+
+-- this query yields the following testimony:
+
+/* name	transcript
+Jeremy Bowers	I was hired by a woman with a lot of money. I don't know her name but I know she's around 5'5" (65") or 5'7" (67"). 
+			She has red hair and she drives a Tesla Model S. I know that she attended the SQL Symphony Concert 3 times in December 2017.*/
+
+-- Given the preceeding testinmony, I then ran the following query to narrow down the mastermind : 
+
+SELECT 
+p.name
+FROM person AS p
+	JOIN facebook_event_checkin AS fb
+	 ON p.id = person_id
+	JOIN drivers_license AS dl
+	 ON p.license_id = dl.id
+	JOIN income AS inc
+	 ON p.ssn = inc.ssn
+WHERE fb.event_name = 'SQL Symphony Concert'
+AND dl.height BETWEEN 65 AND 67
+AND dl.gender = 'female'
+AND dl.hair_color = 'red'
+AND dl.car_make = 'Tesla'
+AND dl.car_model = 'Model S'
+GROUP BY p.name
+HAVING COUNT(fb.date) = 3;
+
+--this yields one name that fits all of the descriptions : Miranda Priestly
+
+-- inserting that name into the solution query yields the following : 
+
+-- Congrats, you found the brains behind the murder! Everyone in SQL City hails you as the greatest SQL detective of all time. Time to break out the champagne!
+
+-- Miranda Priestly was the mastermind behind the murder comitted by Jeremy Bowers! I was also able to meet the challenge of figuring out the mastermind using 
+only two queries!  Hurray! 
+
+
+
+
+
+
+
+
